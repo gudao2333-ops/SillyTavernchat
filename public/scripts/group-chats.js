@@ -2315,7 +2315,7 @@ export async function importGroupChat(formData, { refresh = true } = {}) {
                 group.chats.push(chatId);
                 await editGroup(selected_group, true, true);
                 if (refresh) {
-                    await displayPastChats();
+                    await displayPastChats([`${chatId}.jsonl`]);
                 }
             }
 

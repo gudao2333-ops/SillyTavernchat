@@ -9574,7 +9574,7 @@ async function importCharacterChat(formData, { refresh = true } = {}) {
     if (fetchResult.ok) {
         const data = await fetchResult.json();
         if (data.res && refresh) {
-            await displayPastChats();
+            await displayPastChats(data?.fileNames || []);
         }
         return data?.fileNames || [];
     }
