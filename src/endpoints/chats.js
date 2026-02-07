@@ -1786,7 +1786,7 @@ router.post('/delete', validateAvatarUrlMiddleware, function (request, response)
             fs.rmdirSync(chunkDir);
         }
         console.info(`Deleted chat file: ${filePath}`);
-        return response.send('ok');
+        return response.send({ ok: true });
     } catch (error) {
         console.error(error);
         return response.sendStatus(500);
@@ -2016,7 +2016,7 @@ router.post('/import', validateAvatarUrlMiddleware, async function (request, res
 
             const jsonData = JSON.parse(header);
 
-            if (!(jsonData.user_name !== undefined || jsonData.name !== undefined)) {
+            if (!(jsonData.user_name !== undefined || jsonData.name !== undefined || jsonData.chat_metadata !== undefined)) {
                 console.error('Incorrect chat format .jsonl');
                 return response.send({ error: true });
             }
