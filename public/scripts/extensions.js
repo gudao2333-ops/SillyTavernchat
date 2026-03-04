@@ -586,21 +586,25 @@ function addExtensionStyle(name, manifest) {
     return new Promise((resolve, reject) => {
         const url = `/scripts/extensions/${name}/${manifest.css}`;
         const id = sanitizeSelector(`${name}-css`);
+        const existing = document.querySelector(`link[id="${id}"],link[href="${url}"]`);
 
-        if ($(`link[id="${id}"]`).length === 0) {
-            const link = document.createElement('link');
-            link.id = id;
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = url;
-            link.onload = function () {
-                resolve();
-            };
-            link.onerror = function (e) {
-                reject(e);
-            };
-            document.head.appendChild(link);
+        if (existing) {
+            resolve();
+            return;
         }
+
+        const link = document.createElement('link');
+        link.id = id;
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = url;
+        link.onload = function () {
+            resolve();
+        };
+        link.onerror = function (e) {
+            reject(e);
+        };
+        document.head.appendChild(link);
     });
 }
 
@@ -618,25 +622,29 @@ function addExtensionScript(name, manifest) {
     return new Promise((resolve, reject) => {
         const url = `/scripts/extensions/${name}/${manifest.js}`;
         const id = sanitizeSelector(`${name}-js`);
-        let ready = false;
+        const existing = document.querySelector(`script[id="${id}"],script[src="${url}"]`);
 
-        if ($(`script[id="${id}"]`).length === 0) {
-            const script = document.createElement('script');
-            script.id = id;
-            script.type = 'module';
-            script.src = url;
-            script.async = true;
-            script.onerror = function (err) {
-                reject(err);
-            };
-            script.onload = function () {
-                if (!ready) {
-                    ready = true;
-                    resolve();
-                }
-            };
-            document.body.appendChild(script);
+        if (existing) {
+            resolve();
+            return;
         }
+
+        let ready = false;
+        const script = document.createElement('script');
+        script.id = id;
+        script.type = 'module';
+        script.src = url;
+        script.async = true;
+        script.onerror = function (err) {
+            reject(err);
+        };
+        script.onload = function () {
+            if (!ready) {
+                ready = true;
+                resolve();
+            }
+        };
+        document.body.appendChild(script);
     });
 }
 
