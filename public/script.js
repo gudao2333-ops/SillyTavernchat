@@ -11,8 +11,6 @@ import {
 } from './lib.js';
 
 import { humanizedDateTime, favsToHotswap, getMessageTimeStamp, dragElement, isMobile, initRossMods } from './scripts/RossAscends-mods.js';
-import './scripts/admin-extensions.js';
-import './scripts/announcements.js';
 import { userStatsHandler, statMesProcess, initStats } from './scripts/stats.js';
 import {
     generateKoboldWithStreaming,
@@ -286,6 +284,8 @@ import { AudioPlayer } from './scripts/audio-player.js';
 import { MacroEnvBuilder } from './scripts/macros/engine/MacroEnvBuilder.js';
 import { MacroEngine } from './scripts/macros/engine/MacroEngine.js';
 import { addChatBackupsBrowser } from './scripts/chat-backups.js';
+import { markPerf } from './scripts/perf-debug.js';
+import { initChatVirtualization } from './scripts/chat-virtualization.js';
 
 /**
  * @typedef {Object<string, any>} ChatMessage
@@ -11230,11 +11230,28 @@ function initCharacterSearch() {
 }
 
 // MARK: DOM Handlers Start
+markPerf('app:bootstrap-start');
 jQuery(async function () {
     setTimeout(function () {
         $('#groupControlsToggle').trigger('click');
         $('#groupCurrentMemberListToggle .inline-drawer-icon').trigger('click');
     }, 200);
+
+    initChatVirtualization();
+
+    const loadDeferredModules = async () => {
+        await Promise.all([
+            import('./scripts/admin-extensions.js'),
+            import('./scripts/announcements.js'),
+        ]);
+        markPerf('app:deferred-modules-ready');
+    };
+
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => void loadDeferredModules(), { timeout: 3000 });
+    } else {
+        setTimeout(() => void loadDeferredModules(), 1200);
+    }
 
     $(document).on('click', '.api_loading', () => cancelStatusCheck('Canceled because connecting was manually canceled'));
 
@@ -11279,6 +11296,8 @@ jQuery(async function () {
     $(document).on('click', '.last_mes .swipe_left', async (e, data) => await swipe(e, SWIPE_DIRECTION.LEFT, data));
 
     initCharacterSearch();
+
+    eventSource.once(event_types.APP_READY, () => markPerf('app:ready'));
 
     $('#mes_impersonate').on('click', function () {
         $('#option_impersonate').trigger('click');

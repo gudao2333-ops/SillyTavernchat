@@ -22,6 +22,7 @@ import { StructuredCloneMap } from './util/StructuredCloneMap.js';
 import { renderTemplateAsync } from './templates.js';
 import { t } from './i18n.js';
 import { accountStorage } from './util/AccountStorage.js';
+import { parseJsonOffThread } from './json-worker-parse.js';
 import { getOrCreatePersonaDescriptor, setPersonaDescription, user_avatar } from './personas.js';
 
 export const world_info_insertion_strategy = {
@@ -5617,7 +5618,8 @@ export async function importWorldInfo(file) {
             jsonData = extractDataFromPng(buffer, 'naidata');
         } else {
             // File should be a JSON file
-            jsonData = await parseJsonFile(file);
+            const text = await file.text();
+            jsonData = await parseJsonOffThread(text);
         }
 
         if (jsonData === undefined || jsonData === null) {
