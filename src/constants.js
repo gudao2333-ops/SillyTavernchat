@@ -356,20 +356,21 @@ export const OPENAI_KEYS = [
 export const AVATAR_WIDTH = 512;
 export const AVATAR_HEIGHT = 768;
 export const DEFAULT_AVATAR_PATH = './public/img/ai4.png';
+export const BRAND_HEADER_TITLE = 'YeduGuan';
 
 export const OPENROUTER_HEADERS = {
     'HTTP-Referer': 'https://sillytavern.app',
-    'X-Title': 'SillyTavern',
+    'X-Title': BRAND_HEADER_TITLE,
 };
 
 export const AIMLAPI_HEADERS = {
     'HTTP-Referer': 'https://sillytavern.app',
-    'X-Title': 'SillyTavern',
+    'X-Title': BRAND_HEADER_TITLE,
 };
 
 export const FEATHERLESS_HEADERS = {
     'HTTP-Referer': 'https://sillytavern.app',
-    'X-Title': 'SillyTavern',
+    'X-Title': BRAND_HEADER_TITLE,
 };
 
 export const OPENROUTER_KEYS = [
