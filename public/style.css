@@ -6256,3 +6256,96 @@ body:not(.movingUI) .drawer-content.maximized {
     border-color: var(--error-color, #e87f7f);
     background-color: rgba(241, 163, 163, 0.2);
 }
+
+/* ===== 夜渡馆商业主题增强（视觉+移动端+首屏渲染） ===== */
+:root {
+    --night-primary: #7fb2ff;
+    --night-accent: #ffbf6b;
+    --night-surface: rgba(16, 23, 39, 0.82);
+    --night-surface-strong: rgba(12, 18, 33, 0.92);
+    --night-border: rgba(148, 192, 255, 0.35);
+}
+
+body {
+    background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(127, 178, 255, 0.12), transparent 55%),
+        radial-gradient(900px 500px at 95% 0%, rgba(255, 191, 107, 0.08), transparent 45%),
+        #0b1222;
+}
+
+.drawer-content,
+#right-nav-panel,
+#left-nav-panel,
+#WorldInfo,
+#extensions_settings,
+#movingDivs {
+    content-visibility: auto;
+    contain-intrinsic-size: 600px;
+}
+
+.drawer-content,
+#sheld,
+#right-nav-panel,
+#left-nav-panel,
+#top-settings-holder {
+    background: var(--night-surface);
+    border: 1px solid var(--night-border);
+    backdrop-filter: blur(10px) saturate(1.05);
+    -webkit-backdrop-filter: blur(10px) saturate(1.05);
+    border-radius: 14px;
+}
+
+.menu_button,
+.right_menu_button,
+.drawer-icon {
+    border-radius: 10px;
+    transition: transform .12s ease, box-shadow .18s ease, background-color .18s ease;
+}
+
+.menu_button:hover,
+.right_menu_button:hover,
+.drawer-icon:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+#top-bar,
+.standoutHeader {
+    background: linear-gradient(90deg, rgba(127, 178, 255, 0.17), rgba(255, 191, 107, 0.15));
+    border-bottom: 1px solid var(--night-border);
+}
+
+.welcomePanel {
+    background: var(--night-surface-strong);
+    border: 1px solid var(--night-border);
+    border-radius: 18px;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+}
+
+.welcomeCharacterCard,
+.recentChat {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(149, 193, 255, 0.2);
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    .menu_button,
+    .right_menu_button {
+        min-height: 38px;
+        padding: 7px 10px;
+    }
+
+    .drawer-content,
+    #right-nav-panel,
+    #left-nav-panel {
+        border-radius: 12px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .welcomePanel {
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+    }
+}
